@@ -24,45 +24,45 @@ import javax.validation.Valid;
 @Slf4j
 public class AccountsController {
 
-  private final AccountsService accountsService;
+	private final AccountsService accountsService;
 
-  @Autowired
-  public AccountsController(AccountsService accountsService) {
-    this.accountsService = accountsService;
-  }
+	@Autowired
+	public AccountsController(AccountsService accountsService) {
+		this.accountsService = accountsService;
+	}
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {
-    log.info("Creating account {}", account);
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> createAccount(@RequestBody @Valid Account account) {
+		log.info("Creating account {}", account);
 
-    try {
-    this.accountsService.createAccount(account);
-    } catch (DuplicateAccountIdException daie) {
-      return new ResponseEntity<>(daie.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+		try {
+			this.accountsService.createAccount(account);
+		} catch (DuplicateAccountIdException daie) {
+			return new ResponseEntity<>(daie.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 
-    return new ResponseEntity<>(HttpStatus.CREATED);
-  }
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 
-  @GetMapping(path = "/{accountId}")
-  public Account getAccount(@PathVariable String accountId) {
-    log.info("Retrieving account for id {}", accountId);
-    return this.accountsService.getAccount(accountId);
-  }
-  
-  @PostMapping( path="/transfers/payment", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Object> initiateTransfer(@RequestBody @Valid PaymentTransfer paymentTransferRequest) {
-    log.info("Initiating Transfer {}", paymentTransferRequest);
+	@GetMapping(path = "/{accountId}")
+	public Account getAccount(@PathVariable String accountId) {
+		log.info("Retrieving account for id {}", accountId);
+		return this.accountsService.getAccount(accountId);
+	}
 
-    try {
-      this.accountsService.initiateTransfer(paymentTransferRequest);
-      log.info("Payment Transfer Successful");
-    } catch (PaymentTransferException tpe) {
-    	log.info("Payment Transfer Failed");
-      return new ResponseEntity<>(tpe.getMessage(), HttpStatus.BAD_REQUEST);
-    }
+	@PostMapping(path = "/transfers/payment", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> initiateTransfer(@RequestBody @Valid PaymentTransfer paymentTransferRequest) {
+		log.info("Initiating Transfer {}", paymentTransferRequest);
 
-    return new ResponseEntity<>(HttpStatus.CREATED);
-  }
+		try {
+			this.accountsService.initiateTransfer(paymentTransferRequest);
+			log.info("Payment Transfer Successful");
+		} catch (PaymentTransferException tpe) {
+			log.info("Payment Transfer Failed");
+			return new ResponseEntity<>(tpe.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
 
 }

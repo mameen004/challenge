@@ -14,25 +14,23 @@ import lombok.Data;
 @Data
 public class PaymentTransfer {
 
-  @NotNull
-  @NotEmpty
-  private final String accountFrom;
-  
-  @NotNull
-  @NotEmpty
-  private final String accountTo;
+	@NotNull
+	@NotEmpty
+	private final String accountFrom;
 
-  @NotNull
-  @Min(value = 0, message = "we do not support overdrafts!)")
-  private BigDecimal amount;
+	@NotNull
+	@NotEmpty
+	private final String accountTo;
 
+	@NotNull
+	@Min(value = 0, message = "we do not support overdrafts!)")
+	private BigDecimal amount;
 
-  @JsonCreator
-  public PaymentTransfer(@JsonProperty("accountFrom") String accountFrom,
-    @JsonProperty("accountTo") String accountTo,
-    @JsonProperty("amount") BigDecimal amount) {
-    this.accountFrom = accountFrom;
-    this.accountTo = accountTo;
-    this.amount = amount;
-  }
+	@JsonCreator
+	public PaymentTransfer(@JsonProperty("accountFrom") String accountFrom, @JsonProperty("accountTo") String accountTo,
+			@JsonProperty("amount") BigDecimal amount) {
+		this.accountFrom = accountFrom;
+		this.accountTo = accountTo;
+		this.amount = amount;
+	}
 }

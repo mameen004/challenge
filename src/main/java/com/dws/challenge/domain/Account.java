@@ -13,36 +13,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Account implements Comparable<Account>{
+public class Account implements Comparable<Account> {
 
-  @NotNull
-  @NotEmpty
-  private final String accountId;
+	@NotNull
+	@NotEmpty
+	private final String accountId;
 
-  @NotNull
-  @Min(value = 0, message = "Initial balance must be positive.")
-  private BigDecimal balance;
-  
-  @JsonIgnore
-  private final Object lock;
+	@NotNull
+	@Min(value = 0, message = "Initial balance must be positive.")
+	private BigDecimal balance;
 
-  public Account(String accountId) {
-    this.accountId = accountId;
-    this.balance = BigDecimal.ZERO;
-    this.lock=new Object();
-  }
+	@JsonIgnore
+	private final Object lock;
 
-  @JsonCreator
-  public Account(@JsonProperty("accountId") String accountId,
-    @JsonProperty("balance") BigDecimal balance) {
-    this.accountId = accountId;
-    this.balance = balance;
-	this.lock = new Object();
-  }
+	public Account(String accountId) {
+		this.accountId = accountId;
+		this.balance = BigDecimal.ZERO;
+		this.lock = new Object();
+	}
 
-  @Override
-  public int compareTo(Account account) {
-		return (Long.valueOf(this.accountId) > Long.valueOf(account.accountId)) ? 1 : (Long.valueOf(this.accountId) < Long.valueOf(account.accountId)) ? -1 : 0;
-  }
-  
+	@JsonCreator
+	public Account(@JsonProperty("accountId") String accountId, @JsonProperty("balance") BigDecimal balance) {
+		this.accountId = accountId;
+		this.balance = balance;
+		this.lock = new Object();
+	}
+
+	@Override
+	public int compareTo(Account account) {
+		return (Long.valueOf(this.accountId) > Long.valueOf(account.accountId)) ? 1
+				: (Long.valueOf(this.accountId) < Long.valueOf(account.accountId)) ? -1 : 0;
+	}
+
 }

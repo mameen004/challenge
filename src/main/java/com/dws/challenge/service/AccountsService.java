@@ -10,32 +10,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountsService {
 
-  @Getter
-  private final AccountsRepository accountsRepository;
-  
-  @Getter
-  private final EmailNotificationService emailNotificationService;
+	@Getter
+	private final AccountsRepository accountsRepository;
 
-  @Autowired
-  public AccountsService(AccountsRepository accountsRepository) {
-    this.accountsRepository = accountsRepository;
-	this.emailNotificationService = new EmailNotificationService();
-  }
+	@Getter
+	private final EmailNotificationService emailNotificationService;
 
-  public void createAccount(Account account) {
-    this.accountsRepository.createAccount(account);
-  }
+	@Autowired
+	public AccountsService(AccountsRepository accountsRepository) {
+		this.accountsRepository = accountsRepository;
+		this.emailNotificationService = new EmailNotificationService();
+	}
 
-  public Account getAccount(String accountId) {
-    return this.accountsRepository.getAccount(accountId);
-  }
-  
-  public void initiateTransfer(PaymentTransfer paymentTransferRequest) {
+	public void createAccount(Account account) {
+		this.accountsRepository.createAccount(account);
+	}
 
-      Boolean isPaymentTransferSuccessful=this.accountsRepository.initiateTransfer(paymentTransferRequest);
-      if(isPaymentTransferSuccessful) {
-    	  emailNotificationService.notifyAboutTransfer(getAccount(paymentTransferRequest.getAccountFrom()), paymentTransferRequest.getAmount()+" has been debited from your account");
-    	  emailNotificationService.notifyAboutTransfer(getAccount(paymentTransferRequest.getAccountTo()), paymentTransferRequest.getAmount()+" has been credited to your account");
-      }
-  }
+	public Account getAccount(String accountId) {
+		return this.accountsRepository.getAccount(accountId);
+	}
+
+	public void initiateTransfer(PaymentTransfer paymentTransferRequest) {
+
+		Boolean isPaymentTransferSuccessful = this.accountsRepository.initiateTransfer(paymentTransferRequest);
+		if (isPaymentTransferSuccessful) {
+			emailNotificationService.notifyAboutTransfer(getAccount(paymentTransferRequest.getAccountFrom()),
+					paymentTransferRequest.getAmount() + " has been debited from your account");
+			emailNotificationService.notifyAboutTransfer(getAccount(paymentTransferRequest.getAccountTo()),
+					paymentTransferRequest.getAmount() + " has been credited to your account");
+		}
+	}
 }
